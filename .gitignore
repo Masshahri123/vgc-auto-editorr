@@ -1,1 +1,24 @@
-src/render.py
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# API Keys
+.env
+.env.*
+!.env.example
+
+# Generated files
+output/
+temp/
+*.log
+
+# Temporary audio
+*.mp3
+*.wav
+
+# Video files
+*.mp4
+*.mov
+
