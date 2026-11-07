@@ -1,0 +1,53 @@
+
+name: VGC Auto Render
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Check required files
+        run: |
+          test -f src/render.py
+          test -f input/video.mp4
+          test -f input/script.txt
+
+      - name: Render VGC with ElevenLabs
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+        run: |
+          python src/render.py
+
+      - name: Upload completed video
+        uses: actions/upload-artifact@v4
+        with:
+          name: VGC-Final-Video
+          path: output/*.mp4
+          if-no-files-found: error
+          retention-days: 7
