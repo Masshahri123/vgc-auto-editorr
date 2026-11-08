@@ -43,16 +43,18 @@ jobs:
             echo "FOUND: $file"
           done
 
-      - name: Render VGC with ElevenLabs
-        env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
-        run: |
-          python src/render.py
 
-      - name: Upload completed video
-        uses: actions/upload-artifact@v4
-        with:
-          name: VGC-Final-Video
-          path: output/final_video.mp4
-          if-no-files-found: error
+      - name: Render VGC without ElevenLabs
+        run: |
+          mkdir -p output
+          ffmpeg -y \
+            -i input/video.mp4 \
+            -c:v libx264 \
+            -preset fast \
+            -crf 20 \
+            -pix_fmt yuv420p \
+            -c:a aac \
+            -movflags +faststart \
+            output/final_video.mp4
+
+          
