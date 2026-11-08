@@ -6,3 +6,7 @@ Datang EG JAYA Wholesale!
 Macam-macam barang ada. Kasut, barang rumah, gadget dan fishing gear.
 
 Nak murah, datang EG JAYA!
+
+input/
+├── script.txt
+└── video.mp4
